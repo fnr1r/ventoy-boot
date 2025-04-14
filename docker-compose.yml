@@ -1,0 +1,7 @@
+---
+services:
+  builder:
+    build: docker
+    privileged: true
+    volumes:
+      - .:/build

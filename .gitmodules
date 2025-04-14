@@ -1,0 +1,23 @@
+[submodule "src/edk2"]
+	path = src/edk2
+	url = https://github.com/tianocore/edk2
+	branch = edk2-stable202402
+	shallow = true
+[submodule "src/edk2-components"]
+	path = src/edk2-components
+	url = https://github.com/fnr1r/ventoy-edk2-components
+[submodule "src/grub"]
+	path = src/grub
+	url = https://github.com/fnr1r/grub.git
+	#branch = grub2-2.04
+	#branch = ventoy-with-configs
+	# Ventoy 1.1.05
+	branch = 5d8790a6aed2bcd15d127142a58d58c52885378f
+	shallow = true
+[submodule "src/ipxe"]
+	path = src/ipxe
+	url = https://github.com/fnr1r/ipxe.git
+	#branch = 3fe683e
+	#branch = ventoy_raw
+	#branch = ventoy_extra
+	branch = ventoy_backports
