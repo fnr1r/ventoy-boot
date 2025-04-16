@@ -48,7 +48,11 @@ RUN --mount=type=cache,target=/var/cache/apt/archives \
 
 RUN --mount=type=cache,target=/var/cache/apt/archives \
     --mount=type=cache,target=/var/lib/apt \
-    apt-get install -y acpica-tools nasm g++ libuuid1 uuid-dev
+    apt-get install -y acpica-tools nasm g++ liblzma-dev libuuid1 uuid-dev
+
+RUN --mount=type=cache,target=/var/cache/apt/archives \
+    --mount=type=cache,target=/var/lib/apt \
+    apt-get install -y genisoimage mkisofs isolinux xorriso
 
 COPY --link --from=toolchains \
     /opt/gcc-linaro-7.4.1-2019.02-x86_64_aarch64-linux-gnu /opt/gcc-linaro-7.4.1-2019.02-x86_64_aarch64-linux-gnu

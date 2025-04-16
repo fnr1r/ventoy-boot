@@ -1,13 +1,14 @@
 include scripts/here.mk
 include $(SCRIPTS_DIR)/shared.mk
 
-SUBPROJECTS := edk2 grub
+PREPARABLE_SUBPROJECTS := edk2 grub
+SUBPROJECTS := $(PREPARABLE_SUBPROJECTS) ipxe
 STAGES := prepare build
 
 .PHONY: all build clean clean-all
 all: build
 build: $(SUBPROJECTS)
-prepare: $(addprefix prepare-, $(SUBPROJECTS))
+prepare: $(addprefix prepare-, $(PREPARABLE_SUBPROJECTS))
 clean:
 	-rm -r dist build
 	-sudo rm -rf $(foreach f,$(FORMATS),build-overlay/$f/work/index)
@@ -20,9 +21,10 @@ clean-all: clean
 .PHONY: $(SUBPROJECTS)
 edk2: $(addsuffix -edk2,$(STAGES))
 grub: $(addsuffix -grub,$(STAGES))
+ipxe: build-ipxe
 
-.PHONY: $(addprefix prepare-, $(SUBPROJECTS))
-$(addprefix prepare-, $(SUBPROJECTS)):
+.PHONY: $(addprefix prepare-, $(PREPARABLE_SUBPROJECTS))
+$(addprefix prepare-, $(PREPARABLE_SUBPROJECTS)):
 	+env UPPERDIR="$(patsubst prepare-%,%-base,$@)" \
 		bash $(SCRIPTS_DIR)/run_in_overlay.sh \
 		$(MAKE) -C $(patsubst prepare-%,%,$@) \

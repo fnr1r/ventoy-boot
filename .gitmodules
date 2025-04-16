@@ -11,3 +11,9 @@
 	# Vento 1.1.05
 	branch = e55feb6c72a9088bb9f951be9cc8e68b456afc74
 	shallow = true
+[submodule "src/ipxe"]
+	path = src/ipxe
+	url = https://github.com/fnr1r/ipxe.git
+	#branch = 3fe683e
+	#branch = ventoy_patched_raw
+	branch = ventoy_patched_backports
