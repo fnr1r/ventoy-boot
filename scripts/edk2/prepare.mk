@@ -14,7 +14,7 @@ add_ventoy: $(BUILDINFO_DIR)/dscpatch $(EDK_MOD_LINKS)
 build_tools:
 	+$(MAKE) -C BaseTools/Source/C
 
-MdeModulePkg/Application/%: ../edk2_modules/%
+MdeModulePkg/%: ../edk2-components/MdeModulePkg/%
 	ln -sf ../../$< $@
 
 $(BUILDINFO_DIR)/dscpatch:

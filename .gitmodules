@@ -3,6 +3,9 @@
 	url = https://github.com/tianocore/edk2
 	branch = edk2-stable202402
 	shallow = true
+[submodule "src/edk2-components"]
+	path = src/edk2-components
+	url = https://github.com/fnr1r/ventoy-edk2-components
 [submodule "src/grub"]
 	path = src/grub
 	url = https://github.com/fnr1r/grub.git
