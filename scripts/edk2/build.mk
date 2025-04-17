@@ -30,7 +30,7 @@ all: build
 build: $(BUILD_DEPS)
 	+bash -c ". edksetup.sh; \
 		build -a $(call uppercase,$(ARCH)) -b RELEASE -t $(TOOLCHAIN) -p MdeModulePkg/MdeModulePkg.dsc"
-	+$(MAKE) -f $(HERE)/dist.mk	
+	+$(MAKE) -f $(HERE)/dist.mk
 
 Conf/tools_def.txt:
 	bash -c ". edksetup.sh"
