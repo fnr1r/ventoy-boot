@@ -10,10 +10,13 @@ ifneq ($(ARCH),i386)
 $(error ipxe is only built for i386 pc)
 endif
 
-.PHONY: all build
-all: build
-build: src/bin/ipxe.lkrn
-	+$(MAKE) -f $(HERE)/dist.mk
+DIST_DIR := $(REPO_DIR)/dist
+VTOY_DIR := $(DIST_DIR)/ventoy
 
-src/%:
-	$(MAKE) -C src $(patsubst src/%,%,$@) NO_WERROR=1
+.PHONY: all dist
+all: dist
+dist: $(VTOY_DIR)/ipxe.krn
+
+$(VTOY_DIR)/ipxe.krn: src/bin/ipxe.lkrn
+	@mkdir -p $(dir $@)
+	$(CP_FILE) $< $@

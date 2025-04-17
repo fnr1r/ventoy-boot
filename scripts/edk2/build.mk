@@ -14,6 +14,8 @@ else
 TOOLCHAIN := GCC
 endif
 
+export TOOLCHAIN
+
 ifeq ($(ARCH), aarch64)
 BUILD_DEPS := $(BUILDINFO_DIR)/aarch64patches
 #$(addprefix $(BUILDINFO_DIR)/,nostackprotector nowerror)
@@ -26,8 +28,9 @@ TARGET_DIR := $(REPO_DIR)/dist/ventoy
 .PHONY: all build
 all: build
 build: $(BUILD_DEPS)
-	bash -c ". edksetup.sh; \
+	+bash -c ". edksetup.sh; \
 		build -a $(call uppercase,$(ARCH)) -b RELEASE -t $(TOOLCHAIN) -p MdeModulePkg/MdeModulePkg.dsc"
+	+$(MAKE) -f $(HERE)/dist.mk	
 
 Conf/tools_def.txt:
 	bash -c ". edksetup.sh"
