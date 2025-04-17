@@ -5,18 +5,25 @@ PREPARABLE_SUBPROJECTS := edk2 grub
 SUBPROJECTS := $(PREPARABLE_SUBPROJECTS) ipxe
 STAGES := prepare build
 
+_overlays := $(shell ls build-overlay)
+_overlays_base := $(filter %-base,$(_overlays))
+_overlays_build := $(filter-out %-base,$(_overlays))
+
+define ovl_clean
+	-sudo rm -rf $(foreach a,$1,build-overlay/$a/work/index)
+	-rm -rf $(addprefix build-overlay/,$1)
+endef
+
 .PHONY: all build clean clean-all
 all: build
 build: $(SUBPROJECTS)
 prepare: $(addprefix prepare-, $(PREPARABLE_SUBPROJECTS))
 clean:
 	-rm -r dist build
-	-sudo rm -rf $(foreach f,$(FORMATS),build-overlay/$f/work/index)
-	-rm -rf $(addprefix build-overlay/,$(FORMATS))
 	-rm -r build-work
+	$(call ovl_clean,$(_overlays_build))
 clean-all: clean
-	-sudo rm -rf build-overlay/bootstrap/work/index
-	-rm -rf build-overlay
+	$(call ovl_clean,$(_overlays_base))
 
 .PHONY: $(SUBPROJECTS)
 edk2: $(addsuffix -edk2,$(STAGES))
