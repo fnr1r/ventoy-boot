@@ -15,4 +15,4 @@ all: build
 build: src/bin/ipxe.lkrn
 
 src/%:
-	$(MAKE) -C src $(patsubst src/%,%,$@) BIOS_MODE=BISO NO_WERROR=1
+	$(MAKE) -C src $(patsubst src/%,%,$@) NO_WERROR=1
