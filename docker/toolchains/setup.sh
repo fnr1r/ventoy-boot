@@ -42,44 +42,6 @@ download_and_extract() {
     rm -r "$tmpd"
 }
 
-#link_bins() {
-#    for bin in "$1"/bin/*; do
-#        bin_name="$(basename "$bin")"
-#        ln -s "$bin" /usr/local/bin/"$bin_name"
-#    done
-#}
-
-UCLIBC_PATH="/opt/mini-native-x86_64"
-UCLIBC_BINS=(g++ ld rawgcc)
-
-post_extract() {
-    pushd "$UCLIBC_PATH" > /dev/null
-    pushd usr/bin > /dev/null
-    for bin in "${UCLIBC_BINS[@]}"; do
-        patchelf --set-interpreter "$UCLIBC_PATH/usr/lib/ld-uClibc.so.0" "$bin"
-    done
-    popd > /dev/null
-    pushd usr/libexec/gcc/x86_64-unknown-linux/4.1.2 > /dev/null
-    for bin in *; do
-        patchelf --set-interpreter "$UCLIBC_PATH/usr/lib/ld-uClibc.so.0" "$bin"
-    done
-    popd > /dev/null
-    mkdir -p xbin
-    cd xbin
-    for bin in gcc ld; do
-        cat > "$bin" <<EOF
-#!/usr/bin/env bash
-set -euo pipefail
-IPATH="/opt/mini-native-x86_64"
-NAME="\$(basename \$(readlink -f -- \$0))"
-#LD_LIBRARY_PATH="\$IPATH/usr/lib"
-exec "\$IPATH/usr/bin/\$NAME" "\$@"
-EOF
-        chmod +x "$bin"
-    done
-    popd > /dev/null
-}
-
 main() {
     cd "$HERE"
     mkdir -p "$TMP_DOWNLOAD"
@@ -89,12 +51,13 @@ main() {
         IFS='#' read -r url src dest <<< "$i"
         download_and_extract "$url" "$src" "/opt/$dest"
     done
-    #for i in /opt/*; do
-    #    link_bins "$i"
-    #done
-    #post_extract
     rm -r "$TMP_DOWNLOAD"
+}
+
+_entry() {
+    set -euo pipefail
+    main "$@"
     eval "exit 0"
 }
 
-main "$@"
+_entry "$@"
