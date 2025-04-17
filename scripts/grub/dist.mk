@@ -48,11 +48,11 @@ endif
 GRUB_FORMAT := $(GRUB_ARCH)-$(PLATFORM)
 
 ifeq ($(PLATFORM), pc)
-	BOOT_EXEC := core.img
-	NETDIR_MODULES := $(MKIMAGE_MODULES) $(NET_MODULES_LEGACY)
+BOOT_EXEC := core.img
+NETDIR_MODULES := $(MKIMAGE_MODULES) $(NET_MODULES_LEGACY)
 else
-	BOOT_EXEC := $(shell bash $(SCRIPTS_DIR)/architectures.sh get_boot_file_name $(FORMAT))
-	NETDIR_MODULES := $(MKIMAGE_MODULES) $(NET_MODULES_UEFI)
+BOOT_EXEC := $(shell bash $(SCRIPTS_DIR)/architectures.sh get_boot_file_name $(FORMAT))
+NETDIR_MODULES := $(MKIMAGE_MODULES) $(NET_MODULES_UEFI)
 endif
 
 $(info FORMAT: $(FORMAT))
@@ -62,17 +62,22 @@ GRUB_LIB := $(wildcard $(PREFIX_DIR)/lib/grub/$(GRUB_FORMAT)/*)
 
 .PHONY: all dist modules modules
 all: dist
-dist: $(DIST_DIR)/EFI/BOOT/$(BOOT_EXEC) modules
+dist: bootexec modules
 modules: $(WORK_DIR)/pxe
 	bash $(HERE)/copy_modules.sh $</$(GRUB_FORMAT) $(GRUB_FORMAT)
 
+.PHONY: bootexec
 ifeq ($(PLATFORM), efi)
+bootexec: $(DIST_DIR)/EFI/BOOT/$(BOOT_EXEC)
 $(DIST_DIR)/EFI/BOOT/$(BOOT_EXEC): $(WORK_DIR)/boot/$(BOOT_EXEC)
 	@mkdir -p $(dir $@)
 	cp -a $< $@
 else
 .PHONY: dist/EFI/BOOT/$(BOOT_EXEC)
-$(DIST_DIR)/EFI/BOOT/$(BOOT_EXEC): $(WORK_DIR)/boot/$(BOOT_EXEC)
+bootexec: $(DIST_DIR)/$(BOOT_EXEC)
+$(DIST_DIR)/$(BOOT_EXEC): $(WORK_DIR)/boot/$(BOOT_EXEC)
+	@mkdir -p $(dir $@)
+	cp -a $< $@
 endif
 
 ifeq ($(COMPRESS_MODULES), true)
