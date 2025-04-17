@@ -72,7 +72,7 @@ opts_sanity_check() {
 ovl_setup() {
     local lowerdirs="$SRC_DIR"
     for low in "${OVL_LOWER_DIRS[@]}"; do
-        lowerdirs+=":$low"
+        lowerdirs="$low:$lowerdirs"
     done
     local upperdir="$OVL_UPPER_DIR"
     local workdir="$OVL_WORK_DIR"
