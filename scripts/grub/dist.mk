@@ -71,13 +71,13 @@ ifeq ($(PLATFORM), efi)
 bootexec: $(DIST_DIR)/EFI/BOOT/$(BOOT_EXEC)
 $(DIST_DIR)/EFI/BOOT/$(BOOT_EXEC): $(WORK_DIR)/boot/$(BOOT_EXEC)
 	@mkdir -p $(dir $@)
-	cp -a $< $@
+	$(CP_FILE) $< $@
 else
 .PHONY: dist/EFI/BOOT/$(BOOT_EXEC)
 bootexec: $(DIST_DIR)/$(BOOT_EXEC)
 $(DIST_DIR)/$(BOOT_EXEC): $(WORK_DIR)/boot/$(BOOT_EXEC)
 	@mkdir -p $(dir $@)
-	cp -a $< $@
+	$(CP_FILE) $< $@
 endif
 
 ifeq ($(COMPRESS_MODULES), true)
@@ -87,12 +87,12 @@ $(DIST_DIR)/grub/$(GRUB_FORMAT)/%.mod: build/pxe/$(GRUB_FORMAT)/%.mod
 else
 $(DIST_DIR)/grub/$(GRUB_FORMAT)/%.mod: build/pxe/$(GRUB_FORMAT)/%.mod
 	@mkdir -p $(dir $@)
-	cp -a $< $@
+	$(CP_FILE) $< $@
 endif
 
 $(DIST_DIR)/grub/$(GRUB_FORMAT)/%.lst: build/pxe/$(GRUB_FORMAT)/%.lst
 	@mkdir -p $(dir $@)
-	cp -a $< $@
+	$(CP_FILE) $< $@
 
 build: $(WORK_DIR)/boot/$(BOOT_EXEC) $(WORK_DIR)/pxe
 
