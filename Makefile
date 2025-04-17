@@ -37,6 +37,14 @@ $(addprefix prepare-, $(PREPARABLE_SUBPROJECTS)):
 		$(MAKE) -C $(patsubst prepare-%,%,$@) \
 		-f $(SCRIPTS_DIR)/$(patsubst prepare-%,%,$@)/prepare.mk
 
-.PHONY: $(addprefix build-, $(SUBPROJECTS))
-$(addprefix build-, $(SUBPROJECTS)): prepare
-	+$(MAKE) -f $(SCRIPTS_DIR)/$(patsubst build-%,%,$@)/build.outer.mk
+define build_target
+$(eval
+.PHONY: build-$1
+build-$1: $(if $2,prepare-$1,)
+	+$$(MAKE) -f $(SCRIPTS_DIR)/$1/build.outer.mk
+)
+endef
+
+$(foreach s,$(SUBPROJECTS),\
+	$(call build_target,$s,$(filter $(PREPARABLE_SUBPROJECTS),$s))\
+)
